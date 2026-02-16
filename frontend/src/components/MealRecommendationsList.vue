@@ -29,7 +29,7 @@ async function loadRecommendations() {
     fast_id: props.fastId ?? undefined,
     fast_duration: props.fastDuration ?? undefined,
     meal_timing: activeTiming.value ?? undefined,
-    limit: props.compact ? 3 : 10,
+    limit: props.compact ? 3 : 100,
   })
 }
 

@@ -152,7 +152,7 @@ def suggest_meals(
     fast_duration: Optional[str] = None,
     phase: Optional[str] = None,
     meal_timing: Optional[str] = None,
-    limit: int = 5,
+    limit: int = 50,
     db: Session = Depends(get_db),
 ):
     return crud.get_meal_suggestions(
