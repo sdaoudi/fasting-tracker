@@ -1,8 +1,6 @@
-const BASE_URL = import.meta.env.VITE_API_URL || (
-  window.location.hostname === 'localhost'
-    ? 'http://localhost:8042'
-    : `${window.location.protocol}//${window.location.hostname}:8042`
-)
+const BASE_URL = import.meta.env.PROD
+  ? ''
+  : 'http://localhost:8042'
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
