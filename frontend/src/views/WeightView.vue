@@ -75,7 +75,7 @@ async function submit() {
       <!-- Chart -->
       <div class="rounded-2xl p-4 mb-6 shadow-sm"
         :style="{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }">
-        <div class="text-sm font-semibold mb-3">Evolution</div>
+        <div class="text-sm font-semibold mb-3">Évolution</div>
         <WeightChart :data="trendData" />
       </div>
 

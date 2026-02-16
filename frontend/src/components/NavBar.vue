@@ -7,7 +7,7 @@ const { isDark, toggle } = useDark()
 
 const tabs = [
   { path: '/', icon: '\u{1F3E0}', label: 'Accueil' },
-  { path: '/start', icon: '\u23F1\uFE0F', label: 'Jeune' },
+  { path: '/start', icon: '\u23F1\uFE0F', label: 'Jeûne' },
   { path: '/stats', icon: '\u{1F4CA}', label: 'Stats' },
   { path: '/weight', icon: '\u2696\uFE0F', label: 'Poids' },
   { path: '/meals', icon: '\u{1F4DD}', label: 'Repas' },

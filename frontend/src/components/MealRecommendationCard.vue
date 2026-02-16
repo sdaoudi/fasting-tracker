@@ -12,7 +12,7 @@ const emit = defineEmits<{
 
 function digestibilityLabel(d: string | null): string {
   if (!d) return ''
-  const map: Record<string, string> = { 'très_facile': 'Tres facile', facile: 'Facile', moyen: 'Moyen' }
+  const map: Record<string, string> = { 'très_facile': 'Très facile', facile: 'Facile', moyen: 'Moyen' }
   return map[d] || d
 }
 

@@ -34,7 +34,7 @@ const byTypeChart = computed(() => {
     data: {
       labels,
       datasets: [{
-        label: 'Jeunes',
+        label: 'Jeûnes',
         data,
         backgroundColor: '#0d9488',
         borderRadius: 8,
@@ -61,7 +61,7 @@ const byTypeChart = computed(() => {
 
     <template v-else-if="stats">
       <div class="grid grid-cols-2 gap-3 mb-6">
-        <StatCard icon="⏱️" label="Jeunes total" :value="stats.total_fasts" />
+        <StatCard icon="⏱️" label="Jeûnes total" :value="stats.total_fasts" />
         <StatCard icon="✅" label="Complétés" :value="stats.completed_fasts" />
         <StatCard icon="📏" label="Durée moyenne" :value="stats.avg_duration_hours ? stats.avg_duration_hours + 'h' : '-'" />
         <StatCard icon="⚖️" label="Poids perdu" :value="stats.total_weight_lost ? stats.total_weight_lost.toFixed(1) + ' kg' : '-'" />
@@ -70,7 +70,7 @@ const byTypeChart = computed(() => {
       <!-- By type chart -->
       <div v-if="byTypeChart && Object.keys(stats.by_type).length > 0" class="rounded-2xl p-4 shadow-sm mb-6"
         :style="{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }">
-        <div class="text-sm font-semibold mb-3">Jeunes par type</div>
+        <div class="text-sm font-semibold mb-3">Jeûnes par type</div>
         <div style="height: 200px;">
           <Bar :data="byTypeChart.data" :options="byTypeChart.options" />
         </div>
@@ -79,7 +79,7 @@ const byTypeChart = computed(() => {
       <!-- Weight chart -->
       <div class="rounded-2xl p-4 shadow-sm mb-6"
         :style="{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }">
-        <div class="text-sm font-semibold mb-3">Evolution du poids</div>
+        <div class="text-sm font-semibold mb-3">Évolution du poids</div>
         <WeightChart :data="weightData" />
       </div>
     </template>

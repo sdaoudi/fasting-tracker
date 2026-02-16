@@ -46,15 +46,15 @@ export function getMealTimingFromHour(): string {
 }
 
 export const CATEGORY_LABELS: Record<string, string> = {
-  rupture_jeune: 'Rupture de jeune',
-  repas_fenetre: 'Fenetre alimentaire',
+  rupture_jeune: 'Rupture de jeûne',
+  repas_fenetre: 'Fenêtre alimentaire',
   reprise_progressive: 'Reprise progressive',
 }
 
 export const DIFFICULTY_LABELS: Record<string, string> = {
   facile: 'Facile',
   moyen: 'Moyen',
-  'avancé': 'Avance',
+  'avancé': 'Avancé',
 }
 
 export const DIGESTIBILITY_COLORS: Record<string, string> = {
@@ -64,8 +64,8 @@ export const DIGESTIBILITY_COLORS: Record<string, string> = {
 }
 
 export const TIMING_LABELS: Record<string, string> = {
-  petit_dejeuner: 'Petit-dejeuner',
-  dejeuner: 'Dejeuner',
-  diner: 'Diner',
+  petit_dejeuner: 'Petit-déjeuner',
+  dejeuner: 'Déjeuner',
+  diner: 'Dîner',
   collation: 'Collation',
 }

@@ -61,7 +61,7 @@ async function startFast() {
 
     <!-- Type selection -->
     <div class="mb-6">
-      <label class="text-sm font-medium mb-2 block">Type de jeune</label>
+      <label class="text-sm font-medium mb-2 block">Type de jeûne</label>
       <div class="grid grid-cols-3 gap-2">
         <button v-for="t in fastTypes" :key="t.label" @click="selectType(t)"
           class="py-3 rounded-xl font-semibold text-center cursor-pointer border-2 transition-all"
@@ -73,7 +73,7 @@ async function startFast() {
           class="py-3 rounded-xl font-semibold text-center cursor-pointer border-2 transition-all col-span-3"
           :class="isCustom ? 'border-teal-primary bg-teal-primary/10 text-teal-primary' : ''"
           :style="!isCustom ? { backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' } : {}">
-          Personnalise
+          Personnalisé
         </button>
       </div>
     </div>
@@ -104,7 +104,7 @@ async function startFast() {
 
     <!-- Custom start time -->
     <div class="mb-6">
-      <label class="text-sm font-medium mb-2 block">Heure de debut (optionnel, defaut: maintenant)</label>
+      <label class="text-sm font-medium mb-2 block">Heure de début (optionnel, défaut : maintenant)</label>
       <input v-model="customStart" type="datetime-local"
         class="w-full px-4 py-2.5 rounded-xl border outline-none"
         :style="{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }" />
