@@ -5,7 +5,6 @@ import MealDetailModal from './MealDetailModal.vue'
 import type { MealRecommendation } from '../types'
 import {
   useMealRecommendations,
-  getMealTimingFromHour,
   CATEGORY_LABELS,
   TIMING_LABELS,
 } from '../composables/useMealRecommendations'
