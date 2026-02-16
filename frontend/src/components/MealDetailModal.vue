@@ -70,7 +70,7 @@ async function logMeal() {
 
     <!-- Modal -->
     <div
-      class="relative z-10 w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl p-5 shadow-xl"
+      class="relative z-10 w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl p-5 pb-20 sm:pb-5 shadow-xl"
       :style="{ backgroundColor: 'var(--bg-card)' }"
     >
       <!-- Close button -->
