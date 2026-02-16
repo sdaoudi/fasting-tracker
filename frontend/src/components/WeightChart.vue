@@ -52,7 +52,7 @@ const chartOptions = computed(() => ({
   <div :style="{ height: mini ? '80px' : '250px' }">
     <Line v-if="data.length > 0" :data="chartData" :options="chartOptions" />
     <div v-else class="flex items-center justify-center h-full text-sm" :style="{ color: 'var(--text-secondary)' }">
-      Aucune donnee de poids
+      Aucune donnée de poids
     </div>
   </div>
 </template>

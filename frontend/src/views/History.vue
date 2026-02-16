@@ -51,7 +51,7 @@ onMounted(async () => {
 
     <div v-else-if="filteredFasts.length === 0" class="text-center py-12">
       <div class="text-4xl mb-3">{{'📋'}}</div>
-      <div :style="{ color: 'var(--text-secondary)' }">Aucun jeune enregistre</div>
+      <div :style="{ color: 'var(--text-secondary)' }">Aucun jeûne enregistré</div>
     </div>
 
     <div v-else class="flex flex-col gap-3">

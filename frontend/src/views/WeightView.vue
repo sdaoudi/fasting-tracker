@@ -84,7 +84,7 @@ async function submit() {
         :style="{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }">
         <div class="text-sm font-semibold p-4 pb-2">Historique</div>
         <div v-if="entries.length === 0" class="px-4 pb-4 text-sm" :style="{ color: 'var(--text-secondary)' }">
-          Aucune entree
+          Aucune entrée
         </div>
         <div v-for="entry in entries" :key="entry.id"
           class="flex justify-between items-center px-4 py-3 border-t"

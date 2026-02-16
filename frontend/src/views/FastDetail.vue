@@ -183,11 +183,11 @@ function formatElapsed(f: Fast): string {
             {{ fast.completed ? 'Termine' : 'Arrete' }}
           </span>
         </div>
-        <div class="text-sm mb-1"><strong>Debut :</strong> {{ formatDate(fast.started) }}</div>
+        <div class="text-sm mb-1"><strong>Début :</strong> {{ formatDate(fast.started) }}</div>
         <div v-if="fast.ended" class="text-sm mb-1"><strong>Fin :</strong> {{ formatDate(fast.ended) }}</div>
-        <div v-if="fast.ended" class="text-sm mb-1"><strong>Duree :</strong> {{ formatElapsed(fast) }}</div>
+        <div v-if="fast.ended" class="text-sm mb-1"><strong>Durée :</strong> {{ formatElapsed(fast) }}</div>
         <div v-if="fast.weight_before" class="text-sm mb-1"><strong>Poids avant :</strong> {{ fast.weight_before }} kg</div>
-        <div v-if="fast.weight_after" class="text-sm mb-1"><strong>Poids apres :</strong> {{ fast.weight_after }} kg</div>
+        <div v-if="fast.weight_after" class="text-sm mb-1"><strong>Poids après :</strong> {{ fast.weight_after }} kg</div>
         <div v-if="fast.notes" class="text-sm mt-2 italic" :style="{ color: 'var(--text-secondary)' }">{{ fast.notes }}</div>
       </div>
 
@@ -237,7 +237,7 @@ function formatElapsed(f: Fast): string {
           </button>
         </div>
 
-        <SliderInput v-model="logEnergy" :min="1" :max="10" label="Energie" class="mb-4" />
+        <SliderInput v-model="logEnergy" :min="1" :max="10" label="Énergie" class="mb-4" />
         <SliderInput v-model="logHunger" :min="1" :max="10" label="Faim" class="mb-4" />
 
         <div class="mb-4">
@@ -321,7 +321,7 @@ function formatElapsed(f: Fast): string {
           </div>
           <div v-if="meal.is_breaking_fast" class="text-xs text-orange-accent mt-1">Rupture de jeune</div>
         </div>
-        <div v-if="meals.length === 0" class="text-sm" :style="{ color: 'var(--text-secondary)' }">Aucun repas enregistre</div>
+        <div v-if="meals.length === 0" class="text-sm" :style="{ color: 'var(--text-secondary)' }">Aucun repas enregistré</div>
       </div>
     </template>
   </div>
