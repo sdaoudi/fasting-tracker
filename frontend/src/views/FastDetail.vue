@@ -145,14 +145,14 @@ function formatElapsed(f: Fast): string {
       <!-- Timer section (active) -->
       <div v-if="isActive && timer" class="rounded-2xl p-6 mb-6 text-center shadow-sm"
         :style="{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }">
-        <div class="text-sm font-medium mb-1" :style="{ color: 'var(--text-secondary)' }">Jeune {{ fast.type }}</div>
+        <div class="text-sm font-medium mb-1" :style="{ color: 'var(--text-secondary)' }">Jeûne {{ fast.type }}</div>
 
         <div class="flex justify-center my-4">
           <CircularProgress :progress="timer.progress.value" :size="220" :stroke-width="14" :color="getPhase(elapsedHours).color">
             <div class="text-center">
               <div class="text-3xl font-bold font-mono">{{ timer.elapsedFormatted.value }}</div>
               <div class="text-xs mt-1" :style="{ color: 'var(--text-secondary)' }">
-                {{ timer.isOvertime.value ? 'Objectif depasse !' : `Reste: ${timer.remainingFormatted.value}` }}
+                {{ timer.isOvertime.value ? 'Objectif dépassé !' : `Reste : ${timer.remainingFormatted.value}` }}
               </div>
             </div>
           </CircularProgress>
@@ -170,7 +170,7 @@ function formatElapsed(f: Fast): string {
 
         <button @click="showEndForm = true"
           class="w-full py-2.5 rounded-xl font-semibold text-white bg-red-accent border-0 cursor-pointer">
-          Terminer le Jeune
+          Terminer le Jeûne
         </button>
       </div>
 
@@ -180,7 +180,7 @@ function formatElapsed(f: Fast): string {
         <div class="flex justify-between items-center mb-3">
           <span class="text-sm font-semibold px-2 py-0.5 rounded-lg bg-teal-primary/10 text-teal-primary">{{ fast.type }}</span>
           <span class="text-xs px-2 py-0.5 rounded-lg" :class="fast.completed ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'">
-            {{ fast.completed ? 'Termine' : 'Arrete' }}
+            {{ fast.completed ? 'Terminé' : 'Arrêté' }}
           </span>
         </div>
         <div class="text-sm mb-1"><strong>Début :</strong> {{ formatDate(fast.started) }}</div>
@@ -194,9 +194,9 @@ function formatElapsed(f: Fast): string {
       <!-- End fast modal -->
       <div v-if="showEndForm" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
         <div class="rounded-2xl p-6 w-full max-w-sm" :style="{ backgroundColor: 'var(--bg-card)' }">
-          <h3 class="text-lg font-bold mb-4">Terminer le Jeune</h3>
+          <h3 class="text-lg font-bold mb-4">Terminer le Jeûne</h3>
           <div class="mb-4">
-            <label class="text-sm font-medium mb-2 block">Poids apres (optionnel)</label>
+            <label class="text-sm font-medium mb-2 block">Poids après (optionnel)</label>
             <input v-model="weightAfter" type="number" step="0.1" placeholder="ex: 84.0"
               class="w-full px-4 py-2.5 rounded-xl border outline-none"
               :style="{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }" />
@@ -228,7 +228,7 @@ function formatElapsed(f: Fast): string {
         <SliderInput v-model="logWater" :min="0" :max="5" :step="0.5" label="Eau (litres)" unit="L" class="mb-4" />
 
         <div class="flex items-center gap-3 mb-4">
-          <label class="text-sm font-medium">Electrolytes pris ?</label>
+          <label class="text-sm font-medium">Électrolytes pris ?</label>
           <button @click="logElectrolytes = !logElectrolytes"
             class="w-12 h-6 rounded-full relative cursor-pointer border-0 transition-colors"
             :style="{ backgroundColor: logElectrolytes ? '#0d9488' : 'var(--border-color)' }">
@@ -269,7 +269,7 @@ function formatElapsed(f: Fast): string {
           </div>
           <div class="flex gap-3" :style="{ color: 'var(--text-secondary)' }">
             <span v-if="log.water_liters">💧 {{ log.water_liters }}L</span>
-            <span v-if="log.electrolytes">⚡ Electrolytes</span>
+            <span v-if="log.electrolytes">⚡ Électrolytes</span>
             <span v-if="log.energy_level">⚡ {{ log.energy_level }}/10</span>
             <span v-if="log.hunger_level">🍽️ {{ log.hunger_level }}/10</span>
           </div>
@@ -292,9 +292,9 @@ function formatElapsed(f: Fast): string {
           :style="{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }">
           <select v-model="mealType" class="w-full px-3 py-2 rounded-xl border mb-3 outline-none"
             :style="{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }">
-            <option value="petit-dejeuner">Petit-dejeuner</option>
-            <option value="dejeuner">Dejeuner</option>
-            <option value="diner">Diner</option>
+            <option value="petit-dejeuner">Petit-déjeuner</option>
+            <option value="dejeuner">Déjeuner</option>
+            <option value="diner">Dîner</option>
             <option value="collation">Collation</option>
             <option value="repas">Repas</option>
           </select>
@@ -304,7 +304,7 @@ function formatElapsed(f: Fast): string {
             :style="{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }" />
           <div class="flex items-center gap-2 mb-3">
             <input type="checkbox" v-model="mealBreaking" id="breaking" />
-            <label for="breaking" class="text-sm">Rupture de jeune ?</label>
+            <label for="breaking" class="text-sm">Rupture de jeûne ?</label>
           </div>
           <button @click="submitMeal" :disabled="submittingMeal"
             class="w-full py-2 rounded-xl font-semibold text-white bg-teal-primary border-0 cursor-pointer text-sm disabled:opacity-50">
@@ -319,7 +319,7 @@ function formatElapsed(f: Fast): string {
             <span class="font-medium">{{ meal.meal_name || meal.meal_type }}</span>
             <span v-if="meal.calories" :style="{ color: 'var(--text-secondary)' }">{{ meal.calories }} cal</span>
           </div>
-          <div v-if="meal.is_breaking_fast" class="text-xs text-orange-accent mt-1">Rupture de jeune</div>
+          <div v-if="meal.is_breaking_fast" class="text-xs text-orange-accent mt-1">Rupture de jeûne</div>
         </div>
         <div v-if="meals.length === 0" class="text-sm" :style="{ color: 'var(--text-secondary)' }">Aucun repas enregistré</div>
       </div>

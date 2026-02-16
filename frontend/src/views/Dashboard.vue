@@ -52,14 +52,14 @@ function goToFast() {
       <!-- Active fast -->
       <div v-if="currentFast && timer" class="rounded-2xl p-6 mb-6 text-center shadow-sm"
         :style="{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }">
-        <div class="text-sm font-medium mb-1" :style="{ color: 'var(--text-secondary)' }">Jeune {{ currentFast.type }} en cours</div>
+        <div class="text-sm font-medium mb-1" :style="{ color: 'var(--text-secondary)' }">Jeûne {{ currentFast.type }} en cours</div>
 
         <div class="flex justify-center my-4" @click="goToFast" style="cursor: pointer;">
           <CircularProgress :progress="timer.progress.value" :size="200" :color="getPhase(elapsedHours).color">
             <div class="text-center">
               <div class="text-3xl font-bold font-mono">{{ timer.elapsedFormatted.value }}</div>
               <div class="text-xs mt-1" :style="{ color: 'var(--text-secondary)' }">
-                {{ timer.isOvertime.value ? 'Depasse !' : `Reste: ${timer.remainingFormatted.value}` }}
+                {{ timer.isOvertime.value ? 'Dépassé !' : `Reste : ${timer.remainingFormatted.value}` }}
               </div>
             </div>
           </CircularProgress>
@@ -79,8 +79,8 @@ function goToFast() {
       <div v-else class="rounded-2xl p-6 mb-6 text-center shadow-sm"
         :style="{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }">
         <div class="text-4xl mb-3">{{'🍽️'}}</div>
-        <div class="text-lg font-semibold mb-1">Aucun jeune actif</div>
-        <div class="text-sm mb-4" :style="{ color: 'var(--text-secondary)' }">Commencez un nouveau jeune</div>
+        <div class="text-lg font-semibold mb-1">Aucun jeûne actif</div>
+        <div class="text-sm mb-4" :style="{ color: 'var(--text-secondary)' }">Commencez un nouveau jeûne</div>
         <div class="flex gap-2 justify-center flex-wrap">
           <router-link to="/start" class="px-4 py-2 rounded-xl font-semibold no-underline bg-teal-primary text-white">
             Démarrer un jeûne
@@ -90,7 +90,7 @@ function goToFast() {
 
       <!-- Quick stats -->
       <div v-if="stats" class="grid grid-cols-2 gap-3 mb-6">
-        <StatCard icon="⏱️" label="Jeunes total" :value="stats.total_fasts" />
+        <StatCard icon="⏱️" label="Jeûnes total" :value="stats.total_fasts" />
         <StatCard icon="✅" label="Complétés" :value="stats.completed_fasts" />
         <StatCard icon="📏" label="Durée moyenne" :value="stats.avg_duration_hours ? stats.avg_duration_hours + 'h' : '-'" />
         <StatCard icon="⚖️" label="Poids perdu" :value="stats.total_weight_lost ? stats.total_weight_lost.toFixed(1) + ' kg' : '-'" />
@@ -100,7 +100,7 @@ function goToFast() {
       <div class="rounded-2xl p-4 shadow-sm mb-6"
         :style="{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }">
         <div class="flex items-center justify-between mb-3">
-          <div class="text-sm font-semibold">Repas recommandes</div>
+          <div class="text-sm font-semibold">Repas recommandés</div>
           <router-link to="/meals" class="text-xs no-underline" style="color: var(--color-teal-primary)">
             Voir tout
           </router-link>

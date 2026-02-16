@@ -31,7 +31,7 @@ function formatDate(d: string): string {
       <div class="flex justify-between items-start mb-2">
         <span class="text-sm font-semibold px-2 py-0.5 rounded-lg bg-teal-primary/10 text-teal-primary">{{ fast.type }}</span>
         <span class="text-xs px-2 py-0.5 rounded-lg" :class="fast.completed ? 'bg-green-100 text-green-700' : fast.ended ? 'bg-gray-100 text-gray-600' : 'bg-orange-100 text-orange-700'">
-          {{ fast.completed ? 'Termine' : fast.ended ? 'Arrete' : 'En cours' }}
+          {{ fast.completed ? 'Terminé' : fast.ended ? 'Arrêté' : 'En cours' }}
         </span>
       </div>
       <div class="text-sm" :style="{ color: 'var(--text-secondary)' }">{{ formatDate(fast.started) }}</div>

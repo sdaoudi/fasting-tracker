@@ -39,7 +39,7 @@ function macroPercent(value: number | null): number {
 
 function digestibilityLabel(d: string | null): string {
   if (!d) return ''
-  const map: Record<string, string> = { 'très_facile': 'Tres facile', facile: 'Facile', moyen: 'Moyen' }
+  const map: Record<string, string> = { 'très_facile': 'Très facile', facile: 'Facile', moyen: 'Moyen' }
   return map[d] || d
 }
 
@@ -155,7 +155,7 @@ async function logMeal() {
 
       <!-- Ingredients with checkboxes -->
       <div v-if="recommendation.ingredients?.length" class="mb-4">
-        <div class="text-xs font-semibold mb-2">Ingredients</div>
+        <div class="text-xs font-semibold mb-2">Ingrédients</div>
         <div class="flex flex-col gap-1.5">
           <label
             v-for="(ing, i) in recommendation.ingredients"
@@ -190,14 +190,14 @@ async function logMeal() {
         :disabled="logging"
         @click="logMeal"
       >
-        {{ logging ? 'Enregistrement...' : "J'ai mange ce repas" }}
+        {{ logging ? 'Enregistrement...' : "J'ai mangé ce repas" }}
       </button>
       <div
         v-if="logged"
         class="w-full py-3 rounded-xl font-semibold text-center text-white"
         style="background-color: #10b981"
       >
-        ✓ Repas enregistre !
+        ✓ Repas enregistré !
       </div>
     </div>
   </div>
