@@ -4,6 +4,7 @@ import CircularProgress from '../components/CircularProgress.vue'
 import PhaseIndicator from '../components/PhaseIndicator.vue'
 import StatCard from '../components/StatCard.vue'
 import WeightChart from '../components/WeightChart.vue'
+import MealRecommendationsList from '../components/MealRecommendationsList.vue'
 import { getCurrentFast, getStats, getWeightTrend } from '../api/client'
 import { useTimer, getPhase } from '../composables/useTimer'
 import type { Fast, Stats, WeightTrend } from '../types'
@@ -93,6 +94,22 @@ function goToFast() {
         <StatCard icon="✅" label="Complétés" :value="stats.completed_fasts" />
         <StatCard icon="📏" label="Durée moyenne" :value="stats.avg_duration_hours ? stats.avg_duration_hours + 'h' : '-'" />
         <StatCard icon="⚖️" label="Poids perdu" :value="stats.total_weight_lost ? stats.total_weight_lost.toFixed(1) + ' kg' : '-'" />
+      </div>
+
+      <!-- Meal Recommendations -->
+      <div class="rounded-2xl p-4 shadow-sm mb-6"
+        :style="{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-sm font-semibold">Repas recommandes</div>
+          <router-link to="/meals" class="text-xs no-underline" style="color: var(--color-teal-primary)">
+            Voir tout
+          </router-link>
+        </div>
+        <MealRecommendationsList
+          :fast-id="currentFast?.id"
+          :fast-duration="currentFast?.type"
+          :compact="true"
+        />
       </div>
 
       <!-- Weight chart -->

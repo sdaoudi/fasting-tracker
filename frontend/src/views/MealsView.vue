@@ -1,27 +1,25 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { getRecentMeals } from '../api/client'
-import type { Meal } from '../types'
+import { getRecentMeals, getCurrentFast } from '../api/client'
+import type { Meal, Fast } from '../types'
+import MealRecommendationsList from '../components/MealRecommendationsList.vue'
 
 const meals = ref<Meal[]>([])
+const currentFast = ref<Fast | null>(null)
 const loading = ref(true)
 
 onMounted(async () => {
   try {
-    meals.value = await getRecentMeals(50)
+    const [m, f] = await Promise.all([
+      getRecentMeals(50),
+      getCurrentFast(),
+    ])
+    meals.value = m
+    currentFast.value = f
   } finally {
     loading.value = false
   }
 })
-
-const suggestions = [
-  { name: 'Bouillon d\'os', calories: 40, type: 'rupture' },
-  { name: 'Avocat + oeufs', calories: 350, type: 'repas' },
-  { name: 'Salade de poulet', calories: 400, type: 'repas' },
-  { name: 'Soupe de legumes', calories: 150, type: 'rupture' },
-  { name: 'Saumon + riz', calories: 500, type: 'repas' },
-  { name: 'Yaourt grec + noix', calories: 250, type: 'collation' },
-]
 
 function formatDate(d: string): string {
   return new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
@@ -32,28 +30,25 @@ function formatDate(d: string): string {
   <div class="max-w-lg mx-auto px-4 py-6">
     <h1 class="text-2xl font-bold mb-6">Repas</h1>
 
-    <!-- Suggestions -->
+    <!-- Meal Recommendations -->
     <div class="rounded-2xl p-4 mb-6 shadow-sm"
       :style="{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }">
-      <div class="text-sm font-semibold mb-3">Suggestions de repas sains</div>
-      <div class="grid grid-cols-2 gap-2">
-        <div v-for="s in suggestions" :key="s.name" class="rounded-xl p-3"
-          :style="{ backgroundColor: 'var(--bg-primary)' }">
-          <div class="text-sm font-medium">{{ s.name }}</div>
-          <div class="text-xs" :style="{ color: 'var(--text-secondary)' }">{{ s.calories }} cal - {{ s.type }}</div>
-        </div>
-      </div>
+      <div class="text-sm font-semibold mb-3">Recommandations de repas</div>
+      <MealRecommendationsList
+        :fast-id="currentFast?.id"
+        :fast-duration="currentFast?.type"
+      />
     </div>
 
     <!-- Recent meals -->
     <div>
-      <div class="text-sm font-semibold mb-3">Repas récents</div>
+      <div class="text-sm font-semibold mb-3">Repas recents</div>
 
       <div v-if="loading" class="text-center py-8" :style="{ color: 'var(--text-secondary)' }">Chargement...</div>
 
       <div v-else-if="meals.length === 0" class="text-center py-8">
         <div class="text-4xl mb-3">{{'🍽️'}}</div>
-        <div :style="{ color: 'var(--text-secondary)' }">Aucun repas enregistré</div>
+        <div :style="{ color: 'var(--text-secondary)' }">Aucun repas enregistre</div>
         <div class="text-sm mt-1" :style="{ color: 'var(--text-secondary)' }">Ajoutez des repas depuis la page d'un jeune</div>
       </div>
 

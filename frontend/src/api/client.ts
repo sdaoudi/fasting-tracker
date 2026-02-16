@@ -15,7 +15,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   return res.json()
 }
 
-import type { Fast, DailyLog, Meal, WeightEntry, WeightTrend, Stats, WeeklySummary } from '../types'
+import type { Fast, DailyLog, Meal, WeightEntry, WeightTrend, Stats, WeeklySummary, MealRecommendation, CategoryCount } from '../types'
 
 // Fasts
 export const getFasts = (skip = 0, limit = 20) =>
@@ -75,3 +75,23 @@ export const getStats = () =>
 
 export const getWeeklyStats = (weeks = 8) =>
   request<WeeklySummary[]>(`/api/stats/weekly?weeks=${weeks}`)
+
+// Meal Recommendations
+export const getMealSuggestions = (params: {
+  fast_id?: number; fast_duration?: string; phase?: string; meal_timing?: string; limit?: number
+} = {}) => {
+  const qs = new URLSearchParams()
+  if (params.fast_id) qs.set('fast_id', String(params.fast_id))
+  if (params.fast_duration) qs.set('fast_duration', params.fast_duration)
+  if (params.phase) qs.set('phase', params.phase)
+  if (params.meal_timing) qs.set('meal_timing', params.meal_timing)
+  if (params.limit) qs.set('limit', String(params.limit))
+  const q = qs.toString()
+  return request<MealRecommendation[]>(`/api/meal-recommendations/suggest${q ? '?' + q : ''}`)
+}
+
+export const getMealRecommendation = (id: number) =>
+  request<MealRecommendation>(`/api/meal-recommendations/${id}`)
+
+export const getMealRecommendationCategories = () =>
+  request<CategoryCount[]>('/api/meal-recommendations/categories')

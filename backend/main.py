@@ -11,6 +11,7 @@ from schemas import (
     MealCreate, MealResponse,
     WeightCreate, WeightResponse, WeightTrend,
     StatsResponse, WeeklySummary,
+    MealRecommendationResponse, CategoryCount,
 )
 import crud
 
@@ -141,3 +142,33 @@ def stats(db: Session = Depends(get_db)):
 @app.get("/api/stats/weekly", response_model=list[WeeklySummary])
 def weekly_stats(weeks: int = 8, db: Session = Depends(get_db)):
     return crud.get_weekly_summary(db, weeks=weeks)
+
+
+# ── Meal Recommendations ──
+
+@app.get("/api/meal-recommendations/suggest", response_model=list[MealRecommendationResponse])
+def suggest_meals(
+    fast_id: Optional[int] = None,
+    fast_duration: Optional[str] = None,
+    phase: Optional[str] = None,
+    meal_timing: Optional[str] = None,
+    limit: int = 5,
+    db: Session = Depends(get_db),
+):
+    return crud.get_meal_suggestions(
+        db, fast_id=fast_id, fast_duration=fast_duration,
+        phase=phase, meal_timing=meal_timing, limit=limit,
+    )
+
+
+@app.get("/api/meal-recommendations/categories", response_model=list[CategoryCount])
+def meal_recommendation_categories(db: Session = Depends(get_db)):
+    return crud.get_meal_recommendation_categories(db)
+
+
+@app.get("/api/meal-recommendations/{rec_id}", response_model=MealRecommendationResponse)
+def get_meal_recommendation(rec_id: int, db: Session = Depends(get_db)):
+    rec = crud.get_meal_recommendation(db, rec_id)
+    if not rec:
+        raise HTTPException(status_code=404, detail="Meal recommendation not found")
+    return rec
