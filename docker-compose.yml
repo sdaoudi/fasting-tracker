@@ -1,0 +1,29 @@
+services:
+  backend:
+    build: ./backend
+    container_name: fasting-backend
+    restart: unless-stopped
+    ports:
+      - "8042:8042"
+    environment:
+      - DATABASE_URL=postgresql://fasting_coach:FastingCoach2026!@postgresql.host:5432/fasting_db
+    networks:
+      - fasting-net
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: ""
+    container_name: fasting-frontend
+    restart: unless-stopped
+    ports:
+      - "3099:80"
+    depends_on:
+      - backend
+    networks:
+      - fasting-net
+
+networks:
+  fasting-net:
+    driver: bridge
