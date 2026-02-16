@@ -131,3 +131,43 @@ class WeeklySummary(BaseModel):
     fasts_completed: int
     avg_duration_hours: Optional[float]
     weight_change: Optional[float]
+
+
+# --- Meal Recommendations ---
+
+class Macros(BaseModel):
+    calories: Optional[int] = None
+    protein: Optional[int] = None
+    carbs: Optional[int] = None
+    fat: Optional[int] = None
+
+
+class MealRecommendationResponse(BaseModel):
+    id: int
+    name: str
+    category: str
+    fast_duration: Optional[str]
+    phase: Optional[str]
+    description: Optional[str]
+    ingredients: Optional[list[str]]
+    macros: Optional[Macros]
+    preparation_time: Optional[int]
+    difficulty: Optional[str]
+    tips: Optional[str]
+    digestibility: Optional[str]
+    meal_timing: Optional[str]
+    created_at: Optional[datetime]
+
+    model_config = {"from_attributes": True}
+
+
+class MealRecommendationSuggestParams(BaseModel):
+    fast_id: Optional[int] = None
+    fast_duration: Optional[str] = None
+    phase: Optional[str] = None
+    meal_timing: Optional[str] = None
+
+
+class CategoryCount(BaseModel):
+    category: str
+    count: int

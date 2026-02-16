@@ -195,6 +195,101 @@ def get_stats(db: Session):
     )
 
 
+# ── Meal Recommendations ──
+
+DIGESTIBILITY_ORDER = {"très_facile": 0, "facile": 1, "moyen": 2}
+
+
+def get_meal_recommendation(db: Session, rec_id: int):
+    return db.query(models.MealRecommendation).filter(
+        models.MealRecommendation.id == rec_id
+    ).first()
+
+
+def get_meal_recommendation_categories(db: Session):
+    results = db.query(
+        models.MealRecommendation.category,
+        func.count(models.MealRecommendation.id)
+    ).group_by(models.MealRecommendation.category).all()
+    return [{"category": cat, "count": cnt} for cat, cnt in results]
+
+
+def get_meal_suggestions(
+    db: Session,
+    fast_id: Optional[int] = None,
+    fast_duration: Optional[str] = None,
+    phase: Optional[str] = None,
+    meal_timing: Optional[str] = None,
+    limit: int = 5,
+):
+    q = db.query(models.MealRecommendation)
+
+    # If we have a fast_id, derive context from the actual fast
+    resolved_duration = fast_duration
+    if fast_id and not fast_duration:
+        fast = db.query(models.Fast).filter(models.Fast.id == fast_id).first()
+        if fast:
+            resolved_duration = fast.type
+
+    # Apply smart filtering based on fast duration
+    if resolved_duration:
+        duration_hours = _parse_duration_hours(resolved_duration)
+        if duration_hours is not None:
+            if duration_hours < 24:
+                q = q.filter(
+                    models.MealRecommendation.category.in_(["rupture_jeune", "repas_fenetre"])
+                )
+            elif duration_hours <= 48:
+                q = q.filter(
+                    models.MealRecommendation.category == "rupture_jeune",
+                    models.MealRecommendation.digestibility.in_(["très_facile", "facile"])
+                )
+            elif duration_hours <= 72:
+                q = q.filter(
+                    models.MealRecommendation.category == "reprise_progressive"
+                )
+                if not phase:
+                    q = q.filter(
+                        models.MealRecommendation.phase.in_(["jour_1", "jour_2", "jour_3"])
+                    )
+            else:
+                q = q.filter(
+                    models.MealRecommendation.category == "reprise_progressive",
+                    models.MealRecommendation.fast_duration == "7j+"
+                )
+        else:
+            # Match exact fast_duration string (e.g. "7j+")
+            q = q.filter(models.MealRecommendation.fast_duration == resolved_duration)
+
+    if phase:
+        q = q.filter(models.MealRecommendation.phase == phase)
+
+    if meal_timing:
+        q = q.filter(models.MealRecommendation.meal_timing == meal_timing)
+
+    results = q.all()
+
+    # Sort by digestibility (easiest first), then by preparation_time (fastest first)
+    results.sort(key=lambda r: (
+        DIGESTIBILITY_ORDER.get(r.digestibility, 99),
+        r.preparation_time or 999,
+    ))
+
+    return results[:limit]
+
+
+def _parse_duration_hours(duration_str: str) -> Optional[int]:
+    """Parse a fast duration string like '48h', '16:8', 'OMAD', '7j+' into hours."""
+    d = duration_str.strip().lower()
+    if d.endswith("h") and d[:-1].isdigit():
+        return int(d[:-1])
+    mapping = {
+        "16:8": 16, "18:6": 18, "20:4": 20,
+        "omad": 23, "7j+": 168,
+    }
+    return mapping.get(d)
+
+
 def get_weekly_summary(db: Session, weeks: int = 8):
     results = []
     today = date.today()

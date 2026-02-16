@@ -2,6 +2,7 @@ from sqlalchemy import (
     Column, Integer, String, Boolean, Text, Numeric, Date, DateTime, ARRAY,
     ForeignKey, CheckConstraint
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from database import Base
@@ -63,6 +64,25 @@ class Meal(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     fast = relationship("Fast", back_populates="meals")
+
+
+class MealRecommendation(Base):
+    __tablename__ = "meal_recommendations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(200), nullable=False)
+    category = Column(String(50), nullable=False)
+    fast_duration = Column(String(20), nullable=True)
+    phase = Column(String(50), nullable=True)
+    description = Column(Text, nullable=True)
+    ingredients = Column(ARRAY(Text), nullable=True)
+    macros = Column(JSONB, nullable=True)
+    preparation_time = Column(Integer, nullable=True)
+    difficulty = Column(String(20), nullable=True)
+    tips = Column(Text, nullable=True)
+    digestibility = Column(String(20), nullable=True)
+    meal_timing = Column(String(50), nullable=True)
+    created_at = Column(DateTime, server_default=func.now())
 
 
 class WeightLog(Base):

@@ -66,3 +66,32 @@ export interface WeeklySummary {
   avg_duration_hours: number | null
   weight_change: number | null
 }
+
+export interface Macros {
+  calories: number | null
+  protein: number | null
+  carbs: number | null
+  fat: number | null
+}
+
+export interface MealRecommendation {
+  id: number
+  name: string
+  category: string
+  fast_duration: string | null
+  phase: string | null
+  description: string | null
+  ingredients: string[] | null
+  macros: Macros | null
+  preparation_time: number | null
+  difficulty: string | null
+  tips: string | null
+  digestibility: string | null
+  meal_timing: string | null
+  created_at: string | null
+}
+
+export interface CategoryCount {
+  category: string
+  count: number
+}
