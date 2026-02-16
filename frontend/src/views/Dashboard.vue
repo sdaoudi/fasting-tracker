@@ -69,7 +69,7 @@ function goToFast() {
         <div class="flex gap-3">
           <router-link :to="`/fast/${currentFast.id}`"
             class="flex-1 py-2.5 rounded-xl font-semibold text-center no-underline bg-teal-primary text-white">
-            Voir details
+            Voir détails
           </router-link>
         </div>
       </div>
@@ -82,7 +82,7 @@ function goToFast() {
         <div class="text-sm mb-4" :style="{ color: 'var(--text-secondary)' }">Commencez un nouveau jeune</div>
         <div class="flex gap-2 justify-center flex-wrap">
           <router-link to="/start" class="px-4 py-2 rounded-xl font-semibold no-underline bg-teal-primary text-white">
-            Demarrer un jeune
+            Démarrer un jeûne
           </router-link>
         </div>
       </div>
@@ -90,8 +90,8 @@ function goToFast() {
       <!-- Quick stats -->
       <div v-if="stats" class="grid grid-cols-2 gap-3 mb-6">
         <StatCard icon="⏱️" label="Jeunes total" :value="stats.total_fasts" />
-        <StatCard icon="✅" label="Completes" :value="stats.completed_fasts" />
-        <StatCard icon="📏" label="Duree moyenne" :value="stats.avg_duration_hours ? stats.avg_duration_hours + 'h' : '-'" />
+        <StatCard icon="✅" label="Complétés" :value="stats.completed_fasts" />
+        <StatCard icon="📏" label="Durée moyenne" :value="stats.avg_duration_hours ? stats.avg_duration_hours + 'h' : '-'" />
         <StatCard icon="⚖️" label="Poids perdu" :value="stats.total_weight_lost ? stats.total_weight_lost.toFixed(1) + ' kg' : '-'" />
       </div>
 

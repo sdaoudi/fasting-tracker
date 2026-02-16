@@ -47,13 +47,13 @@ function formatDate(d: string): string {
 
     <!-- Recent meals -->
     <div>
-      <div class="text-sm font-semibold mb-3">Repas recents</div>
+      <div class="text-sm font-semibold mb-3">Repas récents</div>
 
       <div v-if="loading" class="text-center py-8" :style="{ color: 'var(--text-secondary)' }">Chargement...</div>
 
       <div v-else-if="meals.length === 0" class="text-center py-8">
         <div class="text-4xl mb-3">{{'🍽️'}}</div>
-        <div :style="{ color: 'var(--text-secondary)' }">Aucun repas enregistre</div>
+        <div :style="{ color: 'var(--text-secondary)' }">Aucun repas enregistré</div>
         <div class="text-sm mt-1" :style="{ color: 'var(--text-secondary)' }">Ajoutez des repas depuis la page d'un jeune</div>
       </div>
 

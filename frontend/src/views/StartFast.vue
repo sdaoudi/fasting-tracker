@@ -57,7 +57,7 @@ async function startFast() {
 
 <template>
   <div class="max-w-lg mx-auto px-4 py-6">
-    <h1 class="text-2xl font-bold mb-6">Demarrer un Jeune</h1>
+    <h1 class="text-2xl font-bold mb-6">Démarrer un Jeûne</h1>
 
     <!-- Type selection -->
     <div class="mb-6">
@@ -80,7 +80,7 @@ async function startFast() {
 
     <!-- Custom hours -->
     <div v-if="isCustom" class="mb-6">
-      <label class="text-sm font-medium mb-2 block">Duree (heures)</label>
+      <label class="text-sm font-medium mb-2 block">Durée (heures)</label>
       <input v-model.number="customHours" type="number" min="1" max="168"
         class="w-full px-4 py-2.5 rounded-xl border outline-none"
         :style="{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }" />
@@ -113,7 +113,7 @@ async function startFast() {
     <!-- Submit -->
     <button @click="startFast" :disabled="submitting"
       class="w-full py-3 rounded-xl font-bold text-lg text-white bg-teal-primary disabled:opacity-50 border-0 cursor-pointer">
-      {{ submitting ? 'Demarrage...' : 'Demarrer le Jeune' }}
+      {{ submitting ? 'Démarrage...' : 'Démarrer le Jeûne' }}
     </button>
   </div>
 </template>

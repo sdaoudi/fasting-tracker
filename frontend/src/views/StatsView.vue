@@ -62,8 +62,8 @@ const byTypeChart = computed(() => {
     <template v-else-if="stats">
       <div class="grid grid-cols-2 gap-3 mb-6">
         <StatCard icon="⏱️" label="Jeunes total" :value="stats.total_fasts" />
-        <StatCard icon="✅" label="Completes" :value="stats.completed_fasts" />
-        <StatCard icon="📏" label="Duree moyenne" :value="stats.avg_duration_hours ? stats.avg_duration_hours + 'h' : '-'" />
+        <StatCard icon="✅" label="Complétés" :value="stats.completed_fasts" />
+        <StatCard icon="📏" label="Durée moyenne" :value="stats.avg_duration_hours ? stats.avg_duration_hours + 'h' : '-'" />
         <StatCard icon="⚖️" label="Poids perdu" :value="stats.total_weight_lost ? stats.total_weight_lost.toFixed(1) + ' kg' : '-'" />
       </div>
 
