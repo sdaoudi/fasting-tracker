@@ -56,7 +56,7 @@ async function startFast() {
 </script>
 
 <template>
-  <div class="max-w-lg mx-auto px-4 py-6">
+  <div class="max-w-lg mx-auto px-5 pt-6 pb-8">
     <h1 class="text-2xl font-bold mb-6">Démarrer un Jeûne</h1>
 
     <!-- Type selection -->
@@ -106,8 +106,8 @@ async function startFast() {
     <div class="mb-6">
       <label class="text-sm font-medium mb-2 block">Heure de début (optionnel, défaut : maintenant)</label>
       <input v-model="customStart" type="datetime-local"
-        class="w-full px-4 py-2.5 rounded-xl border outline-none"
-        :style="{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }" />
+        class="w-full px-4 py-2.5 rounded-xl border outline-none appearance-none min-h-[44px]"
+        :style="{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-primary)', colorScheme: 'light dark', WebkitTextFillColor: 'var(--text-primary)' }" />
     </div>
 
     <!-- Submit -->
