@@ -3,10 +3,12 @@ import { ref, shallowRef, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import CircularProgress from '../components/CircularProgress.vue'
 import PhaseIndicator from '../components/PhaseIndicator.vue'
+import BodyStateCard from '../components/BodyStateCard.vue'
 import MoodSelector from '../components/MoodSelector.vue'
 import SliderInput from '../components/SliderInput.vue'
 import { getFast, updateFast, getLogs, createLog, getMeals, createMeal } from '../api/client'
 import { useTimer, getPhase, formatDuration } from '../composables/useTimer'
+import { useBodyState } from '../composables/useBodyState'
 import type { Fast, DailyLog, Meal } from '../types'
 
 const route = useRoute()
@@ -20,6 +22,7 @@ const loading = ref(true)
 const timer = shallowRef<ReturnType<typeof useTimer> | null>(null)
 const elapsedHours = computed(() => timer.value ? timer.value.elapsed.value / 3600000 : 0)
 const isActive = computed(() => fast.value && !fast.value.ended)
+const { state: bodyState } = useBodyState(elapsedHours)
 
 // Log form
 const logWater = ref(2)
@@ -172,6 +175,11 @@ function formatElapsed(f: Fast): string {
           class="w-full py-2.5 rounded-xl font-semibold text-white bg-red-accent border-0 cursor-pointer">
           Terminer le Jeûne
         </button>
+      </div>
+
+      <!-- Body State Information Card -->
+      <div v-if="isActive && timer" class="mb-6">
+        <BodyStateCard :state="bodyState" :elapsed-hours="elapsedHours" />
       </div>
 
       <!-- Completed fast summary -->
