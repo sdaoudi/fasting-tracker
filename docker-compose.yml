@@ -1,4 +1,22 @@
 services:
+  db:
+    image: postgres:16-alpine
+    container_name: fasting-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: fasting_coach
+      POSTGRES_PASSWORD: fasting_local
+      POSTGRES_DB: fasting_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - fasting-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fasting_coach -d fasting_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   backend:
     build: ./backend
     container_name: fasting-backend
@@ -6,7 +24,10 @@ services:
     ports:
       - "8042:8042"
     environment:
-      - DATABASE_URL=postgresql://fasting_coach:FastingCoach2026!@postgresql.host:5432/fasting_db
+      - DATABASE_URL=postgresql://fasting_coach:fasting_local@db:5432/fasting_db
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
       - fasting-net
 
@@ -23,6 +44,9 @@ services:
       - backend
     networks:
       - fasting-net
+
+volumes:
+  postgres_data:
 
 networks:
   fasting-net:

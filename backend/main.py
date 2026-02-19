@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from datetime import date, datetime, timezone
 from typing import Optional
 
-from database import get_db
+from database import get_db, engine, Base
 from schemas import (
     FastCreate, FastUpdate, FastResponse,
     DailyLogCreate, DailyLogResponse,
@@ -14,8 +14,13 @@ from schemas import (
     MealRecommendationResponse, CategoryCount,
 )
 import crud
+import models  # noqa: F401 — needed so all models are registered before create_all
+import seed
 
 app = FastAPI(title="Fasting Tracker API")
+
+Base.metadata.create_all(bind=engine)
+seed.run()
 
 app.add_middleware(
     CORSMiddleware,
