@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { createFast } from '../api/client'
+import { saveActiveFast } from '../composables/useOfflineStorage'
 
 const router = useRouter()
 
@@ -46,6 +47,7 @@ async function startFast() {
     if (customStart.value) data.started = new Date(customStart.value).toISOString()
 
     const fast = await createFast(data as Parameters<typeof createFast>[0])
+    saveActiveFast(fast)
     router.push(`/fast/${fast.id}`)
   } catch (e) {
     alert('Erreur: ' + (e as Error).message)
