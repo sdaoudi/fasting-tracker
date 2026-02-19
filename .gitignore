@@ -6,3 +6,4 @@ __pycache__/
 /frontend/node_modules/
 /backend/__pycache__/
 .vite/
+docker-compose.override.yml
