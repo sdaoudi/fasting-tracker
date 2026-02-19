@@ -7,6 +7,7 @@ import WeightChart from '../components/WeightChart.vue'
 import MealRecommendationsList from '../components/MealRecommendationsList.vue'
 import { getCurrentFast, getStats, getWeightTrend } from '../api/client'
 import { useTimer, getPhase } from '../composables/useTimer'
+import { saveActiveFast, loadActiveFast, clearActiveFast } from '../composables/useOfflineStorage'
 import type { Fast, Stats, WeightTrend } from '../types'
 import { useRouter } from 'vue-router'
 
@@ -15,6 +16,7 @@ const currentFast = ref<Fast | null>(null)
 const stats = ref<Stats | null>(null)
 const weightData = ref<WeightTrend[]>([])
 const loading = ref(true)
+const isOfflineData = ref(false)
 
 const timer = shallowRef<ReturnType<typeof useTimer> | null>(null)
 const elapsedHours = computed(() => timer.value ? timer.value.elapsed.value / 3600000 : 0)
@@ -29,8 +31,19 @@ onMounted(async () => {
     currentFast.value = fast
     stats.value = s
     weightData.value = w
-    if (fast) {
+    if (fast && !fast.ended) {
+      saveActiveFast(fast)
       timer.value = useTimer(fast.started, fast.target_hours)
+    } else {
+      clearActiveFast()
+    }
+  } catch {
+    // Offline fallback: load active fast from localStorage
+    const cached = loadActiveFast()
+    if (cached && !cached.ended) {
+      currentFast.value = cached
+      timer.value = useTimer(cached.started, cached.target_hours)
+      isOfflineData.value = true
     }
   } finally {
     loading.value = false

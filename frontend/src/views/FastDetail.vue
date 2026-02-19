@@ -9,16 +9,20 @@ import SliderInput from '../components/SliderInput.vue'
 import { getFast, updateFast, getLogs, createLog, getMeals, createMeal } from '../api/client'
 import { useTimer, getPhase, formatDuration } from '../composables/useTimer'
 import { useBodyState } from '../composables/useBodyState'
+import { loadActiveFast, clearActiveFast } from '../composables/useOfflineStorage'
+import { useOnlineStatus } from '../composables/useOnlineStatus'
 import type { Fast, DailyLog, Meal } from '../types'
 
 const route = useRoute()
 const router = useRouter()
 const fastId = Number(route.params.id)
+const { isOnline } = useOnlineStatus()
 
 const fast = ref<Fast | null>(null)
 const logs = ref<DailyLog[]>([])
 const meals = ref<Meal[]>([])
 const loading = ref(true)
+const isOfflineData = ref(false)
 const timer = shallowRef<ReturnType<typeof useTimer> | null>(null)
 const elapsedHours = computed(() => timer.value ? timer.value.elapsed.value / 3600000 : 0)
 const isActive = computed(() => fast.value && !fast.value.ended)
@@ -61,6 +65,14 @@ onMounted(async () => {
     if (f && !f.ended) {
       timer.value = useTimer(f.started, f.target_hours)
     }
+  } catch {
+    // Offline fallback: load active fast from localStorage
+    const cached = loadActiveFast()
+    if (cached && cached.id === fastId && !cached.ended) {
+      fast.value = cached
+      timer.value = useTimer(cached.started, cached.target_hours)
+      isOfflineData.value = true
+    }
   } finally {
     loading.value = false
   }
@@ -78,6 +90,7 @@ async function endFast() {
     fast.value = await getFast(fastId)
     timer.value?.stop()
     timer.value = null
+    clearActiveFast()
     showEndForm.value = false
   } finally {
     submittingEnd.value = false
@@ -171,9 +184,10 @@ function formatElapsed(f: Fast): string {
           </div>
         </div>
 
-        <button @click="showEndForm = true"
-          class="w-full py-2.5 rounded-xl font-semibold text-white bg-red-accent border-0 cursor-pointer">
-          Terminer le Jeûne
+        <button @click="showEndForm = true" :disabled="!isOnline"
+          class="w-full py-2.5 rounded-xl font-semibold text-white bg-red-accent border-0 cursor-pointer disabled:opacity-50"
+          :title="!isOnline ? 'Connexion requise' : ''">
+          {{ isOnline ? 'Terminer le Jeûne' : 'Terminer le Jeûne (hors ligne)' }}
         </button>
       </div>
 
@@ -260,9 +274,9 @@ function formatElapsed(f: Fast): string {
             :style="{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }"></textarea>
         </div>
 
-        <button @click="submitLog" :disabled="submittingLog"
+        <button @click="submitLog" :disabled="submittingLog || !isOnline"
           class="w-full py-2.5 rounded-xl font-semibold text-white bg-teal-primary border-0 cursor-pointer disabled:opacity-50">
-          {{ submittingLog ? 'Enregistrement...' : 'Enregistrer' }}
+          {{ !isOnline ? 'Hors ligne' : submittingLog ? 'Enregistrement...' : 'Enregistrer' }}
         </button>
       </div>
 
@@ -314,9 +328,9 @@ function formatElapsed(f: Fast): string {
             <input type="checkbox" v-model="mealBreaking" id="breaking" />
             <label for="breaking" class="text-sm">Rupture de jeûne ?</label>
           </div>
-          <button @click="submitMeal" :disabled="submittingMeal"
+          <button @click="submitMeal" :disabled="submittingMeal || !isOnline"
             class="w-full py-2 rounded-xl font-semibold text-white bg-teal-primary border-0 cursor-pointer text-sm disabled:opacity-50">
-            {{ submittingMeal ? '...' : 'Enregistrer le repas' }}
+            {{ !isOnline ? 'Hors ligne' : submittingMeal ? '...' : 'Enregistrer le repas' }}
           </button>
         </div>
 
