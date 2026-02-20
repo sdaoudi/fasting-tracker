@@ -5,7 +5,8 @@ import PhaseIndicator from '../components/PhaseIndicator.vue'
 import StatCard from '../components/StatCard.vue'
 import WeightChart from '../components/WeightChart.vue'
 import MealRecommendationsList from '../components/MealRecommendationsList.vue'
-import { getCurrentFast, getStats, getWeightTrend } from '../api/client'
+import FastCard from '../components/FastCard.vue'
+import { getCurrentFast, getStats, getWeightTrend, getFasts } from '../api/client'
 import { useTimer, getPhase } from '../composables/useTimer'
 import { saveActiveFast, loadActiveFast, clearActiveFast } from '../composables/useOfflineStorage'
 import type { Fast, Stats, WeightTrend } from '../types'
@@ -15,6 +16,7 @@ const router = useRouter()
 const currentFast = ref<Fast | null>(null)
 const stats = ref<Stats | null>(null)
 const weightData = ref<WeightTrend[]>([])
+const recentFasts = ref<Fast[]>([])
 const loading = ref(true)
 const isOfflineData = ref(false)
 
@@ -23,14 +25,16 @@ const elapsedHours = computed(() => timer.value ? timer.value.elapsed.value / 36
 
 onMounted(async () => {
   try {
-    const [fast, s, w] = await Promise.all([
+    const [fast, s, w, fasts] = await Promise.all([
       getCurrentFast(),
       getStats(),
       getWeightTrend(30),
+      getFasts(0, 5),
     ])
     currentFast.value = fast
     stats.value = s
     weightData.value = w
+    recentFasts.value = fasts.filter((f: Fast) => f.ended)
     if (fast && !fast.ended) {
       saveActiveFast(fast)
       timer.value = useTimer(fast.started, fast.target_hours)
@@ -107,6 +111,19 @@ function goToFast() {
         <StatCard icon="✅" label="Complétés" :value="stats.completed_fasts" />
         <StatCard icon="📏" label="Durée moyenne" :value="stats.avg_duration_hours ? stats.avg_duration_hours + 'h' : '-'" />
         <StatCard icon="⚖️" label="Poids perdu" :value="stats.total_weight_lost ? stats.total_weight_lost.toFixed(1) + ' kg' : '-'" />
+      </div>
+
+      <!-- Recent completed fasts -->
+      <div v-if="recentFasts.length > 0" class="mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-sm font-semibold">Derniers jeûnes</div>
+          <router-link to="/history" class="text-xs no-underline" style="color: var(--color-teal-primary)">
+            Voir tout
+          </router-link>
+        </div>
+        <div class="flex flex-col gap-2">
+          <FastCard v-for="fast in recentFasts" :key="fast.id" :fast="fast" />
+        </div>
       </div>
 
       <!-- Meal Recommendations -->
