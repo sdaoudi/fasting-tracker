@@ -171,14 +171,12 @@ def get_stats(db: Session):
         durations = [(f.ended - f.started).total_seconds() / 3600 for f in completed_fasts]
         avg_hours = round(sum(durations) / len(durations), 1)
 
-    # Total weight lost
+    # Total weight lost (first weight log entry - last weight log entry)
     total_lost = None
-    fasts_with_weight = db.query(models.Fast).filter(
-        models.Fast.weight_before.isnot(None),
-        models.Fast.weight_after.isnot(None)
-    ).all()
-    if fasts_with_weight:
-        total_lost = float(sum(f.weight_before - f.weight_after for f in fasts_with_weight))
+    first_weight = db.query(models.WeightLog).order_by(models.WeightLog.weigh_date).first()
+    last_weight = db.query(models.WeightLog).order_by(desc(models.WeightLog.weigh_date)).first()
+    if first_weight and last_weight and first_weight.id != last_weight.id:
+        total_lost = float(first_weight.weight - last_weight.weight)
 
     # By type
     type_counts = db.query(
