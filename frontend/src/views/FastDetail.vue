@@ -40,8 +40,19 @@ const submittingLog = ref(false)
 
 // End fast
 const showEndForm = ref(false)
+const endDateTime = ref('')
 const weightAfter = ref('')
 const submittingEnd = ref(false)
+
+function formatForDatetimeLocal(date: Date): string {
+  const pad = (n: number) => n.toString().padStart(2, '0')
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
+}
+
+function openEndForm() {
+  endDateTime.value = formatForDatetimeLocal(new Date())
+  showEndForm.value = true
+}
 
 // Meal form
 const showMealForm = ref(false)
@@ -82,7 +93,7 @@ async function endFast() {
   submittingEnd.value = true
   try {
     const data: Record<string, unknown> = {
-      ended: new Date().toISOString(),
+      ended: new Date(endDateTime.value).toISOString(),
       completed: true,
     }
     if (weightAfter.value) data.weight_after = parseFloat(weightAfter.value)
@@ -184,7 +195,7 @@ function formatElapsed(f: Fast): string {
           </div>
         </div>
 
-        <button @click="showEndForm = true" :disabled="!isOnline"
+        <button @click="openEndForm()" :disabled="!isOnline"
           class="w-full py-2.5 rounded-xl font-semibold text-white bg-red-accent border-0 cursor-pointer disabled:opacity-50"
           :title="!isOnline ? 'Connexion requise' : ''">
           {{ isOnline ? 'Terminer le Jeûne' : 'Terminer le Jeûne (hors ligne)' }}
@@ -217,6 +228,12 @@ function formatElapsed(f: Fast): string {
       <div v-if="showEndForm" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
         <div class="rounded-2xl p-6 w-full max-w-sm" :style="{ backgroundColor: 'var(--bg-card)' }">
           <h3 class="text-lg font-bold mb-4">Terminer le Jeûne</h3>
+          <div class="mb-4">
+            <label class="text-sm font-medium mb-2 block">Date et heure de fin</label>
+            <input v-model="endDateTime" type="datetime-local"
+              class="w-full px-4 py-2.5 rounded-xl border outline-none"
+              :style="{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }" />
+          </div>
           <div class="mb-4">
             <label class="text-sm font-medium mb-2 block">Poids après (optionnel)</label>
             <input v-model="weightAfter" type="number" step="0.1" placeholder="ex: 84.0"
