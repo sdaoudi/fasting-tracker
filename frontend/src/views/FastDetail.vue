@@ -6,7 +6,7 @@ import PhaseIndicator from '../components/PhaseIndicator.vue'
 import BodyStateCard from '../components/BodyStateCard.vue'
 import MoodSelector from '../components/MoodSelector.vue'
 import SliderInput from '../components/SliderInput.vue'
-import { getFast, updateFast, getLogs, createLog, getMeals, createMeal } from '../api/client'
+import { getFast, updateFast, deleteFast as deleteFastApi, getLogs, createLog, getMeals, createMeal } from '../api/client'
 import { useTimer, getPhase, formatDuration } from '../composables/useTimer'
 import { useBodyState } from '../composables/useBodyState'
 import { loadActiveFast, clearActiveFast } from '../composables/useOfflineStorage'
@@ -40,6 +40,8 @@ const submittingLog = ref(false)
 
 // End fast
 const showEndForm = ref(false)
+const showDeleteConfirm = ref(false)
+const deleting = ref(false)
 const endDateTime = ref('')
 const weightAfter = ref('')
 const submittingEnd = ref(false)
@@ -144,6 +146,17 @@ async function submitMeal() {
     mealNotes.value = ''
   } finally {
     submittingMeal.value = false
+  }
+}
+
+async function confirmDeleteFast() {
+  deleting.value = true
+  try {
+    await deleteFastApi(fastId)
+    clearActiveFast()
+    router.push('/')
+  } finally {
+    deleting.value = false
   }
 }
 
@@ -362,6 +375,31 @@ function formatElapsed(f: Fast): string {
           <div v-if="meal.is_breaking_fast" class="text-xs text-orange-accent mt-1">Rupture de jeûne</div>
         </div>
         <div v-if="meals.length === 0" class="text-sm" :style="{ color: 'var(--text-secondary)' }">Aucun repas enregistré</div>
+      </div>
+      <!-- Delete fast -->
+      <div class="mt-8 mb-6 text-center">
+        <button @click="showDeleteConfirm = true"
+          class="text-sm font-medium border-0 bg-transparent cursor-pointer underline"
+          style="color: #ef4444;">
+          Supprimer ce jeûne
+        </button>
+      </div>
+
+      <!-- Delete confirmation modal -->
+      <div v-if="showDeleteConfirm" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="rounded-2xl p-6 w-full max-w-sm" :style="{ backgroundColor: 'var(--bg-card)' }">
+          <h3 class="text-lg font-bold mb-2">Supprimer ce jeûne ?</h3>
+          <p class="text-sm mb-4" :style="{ color: 'var(--text-secondary)' }">Cette action est irréversible. Tous les journaux et repas associés seront également supprimés.</p>
+          <div class="flex gap-2">
+            <button @click="showDeleteConfirm = false" class="flex-1 py-2.5 rounded-xl border cursor-pointer"
+              :style="{ borderColor: 'var(--border-color)', backgroundColor: 'transparent', color: 'var(--text-primary)' }">Annuler</button>
+            <button @click="confirmDeleteFast" :disabled="deleting"
+              class="flex-1 py-2.5 rounded-xl font-semibold text-white border-0 cursor-pointer disabled:opacity-50"
+              style="background-color: #ef4444;">
+              {{ deleting ? '...' : 'Supprimer' }}
+            </button>
+          </div>
+        </div>
       </div>
     </template>
   </div>
