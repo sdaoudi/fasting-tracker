@@ -231,7 +231,8 @@ function formatElapsed(f: Fast): string {
           <div class="mb-4">
             <label class="text-sm font-medium mb-2 block">Date et heure de fin</label>
             <input v-model="endDateTime" type="datetime-local"
-              class="w-full px-4 py-2.5 rounded-xl border outline-none"
+              class="w-full px-4 py-2.5 rounded-xl border outline-none appearance-none"
+              style="-webkit-appearance: none; -moz-appearance: none; font-size: 16px; min-height: 44px;"
               :style="{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }" />
           </div>
           <div class="mb-4">
