@@ -22,12 +22,6 @@ app = FastAPI(title="Fasting Tracker API")
 Base.metadata.create_all(bind=engine)
 seed.run()
 
-@app.get("/api/health")
-def health_check(db: Session = Depends(get_db)):
-    db.execute(models.Fast.__table__.select().limit(1))
-    return {"status": "ok"}
-
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
